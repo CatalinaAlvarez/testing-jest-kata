@@ -5,12 +5,17 @@ beforeAll(() => {
     global.Date.now = jest.fn(() => new Date('2019-04-07T10:20:30Z').getTime())
 })
 
+const NUM_DAY = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5, 'sat': 6, 'sun': 7 };
+
 const weekday = "mon"; 
 const week = 1; 
 const openHour = 8; 
 const closeHour =14;
 
-const NUM_DAY = { 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5, 'sat': 6, 'sun': 7 };
+const numDay = NUM_DAY[weekday];
+const currentDay = new Date().getDay();
+const hour = new Date().getHours();
+const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
 
 
 function addDays(days) {
@@ -35,34 +40,38 @@ test('Validation a event title and content basic', () => {
 });
 
 test('Validation start date', () => {
-    const numDay = NUM_DAY[weekday];
-    const currentDay = new Date().getDay();
-    const hour = new Date().getHours();
     const date = getDateCalendar(numDay, currentDay);
-
     const result = createEvent(weekday,week,openHour,closeHour);
-    expect(result.start).toStrictEqual(date);
+    expect(result.start.toUTCString).toStrictEqual(date.toUTCString);
 
 });
 
 test('Validation date', () => {
-    const numDay = NUM_DAY[weekday];
-    const currentDay = new Date().getDay();
-    const hour = new Date().getHours();
-    const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
 
     const date = getDateCalendar(numDay, currentDay);
-
     const dateResult = new Date(date).toLocaleDateString('es-ES', options);
-
     const result = createEvent(weekday,week,openHour,closeHour);
     expect(result.date).toStrictEqual(dateResult);
    
 });
 
 
-test('Validation illegal arguments', () => {
-    //TODO: hacer las verificaciones
+describe('Validation illegal arguments', () => {
+    test("Ilegal horario de entrada", () => {
+        const result = () => createEvent(weekday,week,15,14);
+        expect(result).toThrow(Error);        
+    });
+
+    test("Ilegal semana con valor positivo", () => {
+        const result = () => createEvent(weekday,-5,openHour,closeHour);
+        expect(result).toThrow(Error);        
+    });
+    
+    test("Ilegal dia de la semana", () => {
+        const result = () => createEvent("lun",week,openHour,closeHour);
+        expect(result).toThrow(Error);      
+    });
+
 });
 
 
