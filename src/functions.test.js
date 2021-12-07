@@ -50,6 +50,13 @@ test('Validation date', () => {
     const currentDay = new Date().getDay();
     const hour = new Date().getHours();
     const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+
+    const date = getDateCalendar(numDay, currentDay);
+
+    const dateResult = new Date(date).toLocaleDateString('es-ES', options);
+
+    const result = createEvent(weekday,week,openHour,closeHour);
+    expect(result.date).toStrictEqual(dateResult);
    
 });
 
