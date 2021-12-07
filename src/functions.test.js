@@ -66,7 +66,7 @@ describe('Validation illegal arguments', () => {
         const result = () => createEvent(weekday,-5,openHour,closeHour);
         expect(result).toThrow(Error);        
     });
-    
+
     test("Ilegal dia de la semana", () => {
         const result = () => createEvent("lun",week,openHour,closeHour);
         expect(result).toThrow(Error);      
@@ -76,5 +76,62 @@ describe('Validation illegal arguments', () => {
 
 
 test('create an event list of at least 10 events', () => {
-    //TODO: hacer las verificaciones
+    const eventList = [
+    {   weekday: 'mon',
+        week: 1,
+        openHour: 8,
+        closeHour: 15
+    },
+    {   weekday: 'thu',
+        week: 2,
+        openHour: 9,
+        closeHour: 10
+    },
+    {   weekday: 'wed',
+        week: 3,
+        openHour: 7,
+        closeHour: 12
+    },
+    {   weekday: 'sun',
+        week: 4,
+        openHour: 6,
+        closeHour: 8
+    },
+    {   weekday: 'tue',
+        week: 5,
+        openHour: 5,
+        closeHour: 6
+    },
+    {   weekday: 'sat',
+        week: 6,
+        openHour: 20,
+        closeHour: 22
+    },
+    {   weekday: 'fri',
+        week: 7,
+        openHour: 14,
+        closeHour: 15
+    },
+    {   weekday: 'thu',
+        week: 8,
+        openHour: 13,
+        closeHour: 15
+    },
+    {   weekday: 'wed',
+        week: 9,
+        openHour: 8,
+        closeHour: 10
+    },
+    {   weekday: 'mon',
+        week: 1,
+        openHour: 8,
+        closeHour: 11
+    }]
+
+    eventList.map((event) =>{
+        const result = createEvent(event.weekday,event.week,event.openHour,event.closeHour);
+        expect(result.title).toBe("[SOFKA U] Meeting Room");
+        expect(result.description).toBe("Mentoring and Practice");
+        expect(result.duration).toEqual([(event.closeHour-event.openHour), "hour"]);
+    })
 });
